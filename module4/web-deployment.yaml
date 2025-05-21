@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  labels:
+    app: web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: web-container
+        image: registry.domain.com/openshift/httpd
+        volumeMounts:
+        - name: index-page
+          mountPath: /var/www/html/
+      volumes:
+      - name: index-page
+        configMap:
+          name: web-index
