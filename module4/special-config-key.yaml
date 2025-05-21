@@ -1,0 +1,25 @@
+# Create secret with: oc create secret generic super-secret --from-literal=supersecret=hemligt
+# or use yaml below
+apiVersion: v1
+data:
+  supersecret: aGVtbGlndA==
+kind: Secret
+metadata:
+  name: super-secret
+
+# And then the pod, who uses the Secret above
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: special-config
+spec:
+  containers:
+  - image: registry.domain.com/openshift/httpd
+    name: special-config
+    env:
+      - name: SPECIAL_CONFIG_KEY
+        valueFrom:
+          secretRef:
+            name: special-secret
+            key: supersecret
